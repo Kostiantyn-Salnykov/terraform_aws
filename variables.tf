@@ -31,3 +31,14 @@ variable "env" {
     error_message = "The `env` variable should be one of: `dev`, `test`, `prod`."
   }
 }
+
+variable "github_access_token" {
+  description = "GitHub access token for repo. Used by AWS Amplify."
+  type = string
+}
+
+variable "frontend_repository_url" {
+  description = "GitHub repository URL for Front-end app."
+  type = string
+  default = "https://github.com/Kostiantyn-Salnykov/VueApp"
+}

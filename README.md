@@ -15,7 +15,7 @@ IaaC roadmap to create:
 - [x] Lambda Function (with layer(s), from source code);
 - [x] API Gateway (API, mapping, cognito, lambda, domain);
 - [ ] API Gateway (websocket);
-- [ ] Amplify (Vue.js example app);
+- [x] Amplify (Vue.js example app);
 - [ ] RDS (PostgreSQL DB, Aurora);
 - [x] Cognito (user pool, domain, JWT);
 - [x] Cognito oAuth2 (GitHub, Google, etc...);
@@ -26,3 +26,23 @@ IaaC roadmap to create:
 - [ ] CodePipeline;
 - [ ] CodeBuild;
 - [ ] CodeDeploy;
+
+Terraform format
+```commandline
+terraform fmt -recursive
+```
+
+Terraform validate
+```commandline
+terraform validate
+```
+
+Terraform plan
+```commandline
+terraform plan
+```
+
+Run terraform apply with `-var-file` and auto approve.
+```commandline
+terraform apply -var-file="dev.tfvars" -auto-approve
+```
