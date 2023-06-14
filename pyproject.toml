@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "myaws"
+version = "0.1.0"
+description = ""
+authors = ["Kostiantyn Salnykov <kostiantyn.salnykov@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+orjson = "^3.8.14"
+fastapi = "^0.95.2"
+pydantic = {extras = ["dotenv", "email"], version = "^1.10.8"}
+gunicorn = "^20.1.0"
+uuid7 = "^0.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+xenon = "^0.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+# === Black ===
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  | dist
+  | .pytest_cache
+  | .tox
+  | docs
+  | docs_src
+  | .venv
+  | .mypy_cache
+  | .layers
+)/
+'''
+
+# === Isort ===
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 120
+skip_glob = []

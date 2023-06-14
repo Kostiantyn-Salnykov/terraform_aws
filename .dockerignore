@@ -1,0 +1,5 @@
+**.tf
+**.terraform
+*tfvars
+**_modules
+**.hcl
