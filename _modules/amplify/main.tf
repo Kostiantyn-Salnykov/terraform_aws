@@ -22,12 +22,12 @@ variable "domain_name" {
 
 variable "repository_url" {
   description = "GitHub repository URL for Front-end app."
-  type = string
+  type        = string
 }
 
 variable "access_token" {
   default = "GitHub access token for repo. Used by AWS Amplify."
-  type = string
+  type    = string
 }
 # =====
 
@@ -36,21 +36,21 @@ variable "access_token" {
 locals {
   basic_username = "Admin"
   basic_password = "admin123"
-  branch_name = var.env
+  branch_name    = var.env
 }
 # =====
 
 
 resource "aws_amplify_app" "MyAmplifyApp" {
-  name = "${var.name_suffix}-app"
+  name        = "${var.name_suffix}-app"
   description = "Vue.js application."
 
-  repository = var.repository_url
-  access_token = var.access_token
-  enable_branch_auto_build = true
+  repository                  = var.repository_url
+  access_token                = var.access_token
+  enable_branch_auto_build    = true
   enable_branch_auto_deletion = true
 
-  enable_basic_auth = true
+  enable_basic_auth      = true
   basic_auth_credentials = base64encode("${local.basic_username}:${local.basic_password}")
 
   build_spec = file("${path.module}/buildspec.yaml")
@@ -70,9 +70,9 @@ resource "aws_amplify_branch" "MyAmplifyBranch" {
   app_id      = aws_amplify_app.MyAmplifyApp.id
   branch_name = local.branch_name
 
-  framework = "vue"
-  stage = "DEVELOPMENT"  # "PRODUCTION", "BETA", "DEVELOPMENT", "EXPERIMENTAL", "PULL_REQUEST"
-  enable_auto_build = true
+  framework                   = "vue"
+  stage                       = "DEVELOPMENT" # "PRODUCTION", "BETA", "DEVELOPMENT", "EXPERIMENTAL", "PULL_REQUEST"
+  enable_auto_build           = true
   enable_pull_request_preview = true
 }
 

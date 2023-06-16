@@ -9,11 +9,11 @@ terraform {
 }
 
 locals {
-  tags               = { "Terraform" : true, "Project" : var.project_name, "Environment" : var.env }
-  name_suffix        = "${local.tags["Project"]}-${var.env}"
-  availability_zones = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
-  ecs_domain_name    = "${var.env}-service.${var.domain_name}" # <ENV>-service.<DOMAIN NAME>
-  amplify_domain_name    = "${var.env}-app.${var.domain_name}" # <ENV>-app.<DOMAIN NAME>
+  tags                = { "Terraform" : true, "Project" : var.project_name, "Environment" : var.env }
+  name_suffix         = "${local.tags["Project"]}-${var.env}"
+  availability_zones  = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
+  ecs_domain_name     = "${var.env}-service.${var.domain_name}" # <ENV>-service.<DOMAIN NAME>
+  amplify_domain_name = "${var.env}-app.${var.domain_name}"     # <ENV>-app.<DOMAIN NAME>
 }
 
 provider "aws" {
@@ -99,10 +99,16 @@ module "MySNS" {
 
 
 module "MyAmplifyApp" {
-  source = "./_modules/amplify"
-  env = var.env
-  name_suffix = local.name_suffix
-  domain_name = local.amplify_domain_name
-  access_token = var.github_access_token
+  source         = "./_modules/amplify"
+  env            = var.env
+  name_suffix    = local.name_suffix
+  domain_name    = local.amplify_domain_name
+  access_token   = var.github_access_token
   repository_url = var.frontend_repository_url
+}
+
+module "MySQS" {
+  source      = "./_modules/sqs"
+  name        = "MyQueue"
+  name_suffix = local.name_suffix
 }

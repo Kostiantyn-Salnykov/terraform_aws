@@ -9,12 +9,12 @@ IaaC roadmap to create:
 - [x] SES (domain identity, email identity, register Route53 records);
 - [x] SNS (topic);
 - [x] CloudWatch (log group, alarm);
-- [ ] SQS (queue);
+- [x] SQS (queue);
 - [ ] ElastiCache (cluster, DB, connection via VPN endpoint);
 - [x] Lambda Layer (with .zip creation);
 - [x] Lambda Function (with layer(s), from source code);
 - [x] API Gateway (API, mapping, cognito, lambda, domain);
-- [ ] API Gateway (websocket);
+- [ ] API Gateway (Websocket + lambda | file upload to S3);
 - [x] Amplify (Vue.js example app);
 - [ ] RDS (PostgreSQL DB, Aurora);
 - [x] Cognito (user pool, domain, JWT);
@@ -22,7 +22,7 @@ IaaC roadmap to create:
 - [ ] IoT Core (certificates, rule, thing, thing group);
 - [ ] S3 with CloudFront (distribute mkdocs-material build, add Basic Auth);
 - [ ] DynamoDB;
-- [ ] CodeCommit (approval templates);
+- [ ] CodeCommit (repository, approval templates, trigger);
 - [ ] CodePipeline;
 - [ ] CodeBuild;
 - [ ] CodeDeploy;

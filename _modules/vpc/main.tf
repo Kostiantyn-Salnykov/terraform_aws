@@ -32,7 +32,7 @@ resource "aws_vpc" "MyVPC" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
-  tags                 = merge(var.tags, tomap({ "Name" : "Custom" }))
+  tags                 = merge(var.tags, tomap({ "Name" : "Custom VPC" }))
 
 }
 
@@ -74,7 +74,7 @@ resource "aws_security_group" "MySG" {
   name        = "MySG"
   description = "Security Group for ALB"
   vpc_id      = aws_vpc.MyVPC.id
-  tags        = merge(var.tags, tomap({ "Name" : "Custom" }))
+  tags        = merge(var.tags, tomap({ "Name" : "Custom SG" }))
 
   ingress {
     description      = "Allow TCP ${local.http_port}"
