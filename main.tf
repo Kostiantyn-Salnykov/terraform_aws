@@ -10,7 +10,7 @@ terraform {
 
 locals {
   tags                = { "Terraform" : true, "Project" : var.project_name, "Environment" : var.env }
-  name_suffix         = "${local.tags["Project"]}-${var.env}"
+  name_prefix         = "${local.tags["Project"]}-${var.env}"
   availability_zones  = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
   ecs_domain_name     = "${var.env}-service.${var.domain_name}" # <ENV>-service.<DOMAIN NAME>
   amplify_domain_name = "${var.env}-app.${var.domain_name}"     # <ENV>-app.<DOMAIN NAME>
@@ -46,10 +46,10 @@ module "MyAWSECR" {
 
 module "MyAWSECS" {
   source                       = "./_modules/ecs"
-  name_suffix                  = local.name_suffix
+  name_prefix                  = local.name_prefix
   ecr_image_url                = module.MyAWSECR.image_url
-  ecs_task_execution_role_name = "${local.name_suffix}-task-execution-role"
-  ecs_task_role_name           = "${local.name_suffix}-task-role"
+  ecs_task_execution_role_name = "${local.name_prefix}-task-execution-role"
+  ecs_task_role_name           = "${local.name_prefix}-task-role"
   vpc_id                       = module.MyVPC.id
   ecs_domain                   = local.ecs_domain_name
   domain                       = var.domain_name
@@ -86,6 +86,7 @@ module "MyAPIGateway" {
   source       = "./_modules/api_gateway"
   env          = var.env
   cognito_data = module.MyCognito.MyData
+  name_prefix  = local.name_prefix
 }
 
 module "MySNS" {
@@ -101,7 +102,7 @@ module "MySNS" {
 module "MyAmplifyApp" {
   source         = "./_modules/amplify"
   env            = var.env
-  name_suffix    = local.name_suffix
+  name_suffix    = local.name_prefix
   domain_name    = local.amplify_domain_name
   access_token   = var.github_access_token
   repository_url = var.frontend_repository_url
@@ -110,5 +111,11 @@ module "MyAmplifyApp" {
 module "MySQS" {
   source      = "./_modules/sqs"
   name        = "MyQueue"
-  name_suffix = local.name_suffix
+  name_prefix = local.name_prefix
+}
+
+module "MyAPIGatewayWS" {
+  source      = "./_modules/api_gateway_ws"
+  name_prefix = local.name_prefix
+  env         = var.env
 }

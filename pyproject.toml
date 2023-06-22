@@ -13,6 +13,7 @@ fastapi = "^0.95.2"
 pydantic = {extras = ["dotenv", "email"], version = "^1.10.8"}
 gunicorn = "^20.1.0"
 uuid7 = "^0.1.0"
+boto3 = "^1.26.156"
 
 
 [tool.poetry.group.dev.dependencies]

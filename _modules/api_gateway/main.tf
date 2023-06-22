@@ -20,8 +20,21 @@ variable "cognito_data" {
   type        = map(any)
 }
 
+variable "name_prefix" {
+  description = "Project with environment name."
+  type        = string
+}
+
+variable "name" {
+  description = "Name for HTTP API."
+  type        = string
+  default     = "MyAPIGateway"
+}
+
+
 locals {
   authorizer_type = "JWT"
+  name            = "${var.name_prefix}-${var.name}"
 }
 
 
@@ -39,7 +52,7 @@ resource "aws_apigatewayv2_deployment" "MyAPIDeployment" {
 }
 
 resource "aws_apigatewayv2_api" "MyAPI" {
-  name                         = "MyAPI-${var.env}"
+  name                         = local.name
   description                  = "My HTTP API for `${var.env}` environment."
   protocol_type                = "HTTP"
   disable_execute_api_endpoint = true # use `true` when custom domain enabled

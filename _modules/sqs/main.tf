@@ -9,12 +9,12 @@ variable "name" {
   type        = string
 }
 
-variable "name_suffix" {
+variable "name_prefix" {
   description = "Name for Project and environment together."
 }
 
 locals {
-  name = "${var.name_suffix}${var.name}"
+  name = "${var.name_prefix}${var.name}"
 }
 
 resource "aws_sqs_queue" "MyQueue" {

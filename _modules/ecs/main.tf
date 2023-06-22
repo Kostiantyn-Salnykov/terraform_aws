@@ -1,5 +1,5 @@
 # ==Variables==
-variable "name_suffix" {
+variable "name_prefix" {
   default = "Project with environment name."
   type    = string
 }
@@ -61,9 +61,9 @@ variable "tasks_count" {
 
 # ==Locals==
 locals {
-  cluster_name = "${var.name_suffix}-cluster"
-  service_name = "${var.name_suffix}-service"
-  alb_name     = "${var.name_suffix}-alb"
+  cluster_name = "${var.name_prefix}-cluster"
+  service_name = "${var.name_prefix}-service"
+  alb_name     = "${var.name_prefix}-alb"
 }
 # =====
 
@@ -129,7 +129,7 @@ resource "aws_iam_role" "MyECSTaskRole" {
 }
 
 resource "aws_ecs_task_definition" "MyECSTaskDefinition" {
-  family                   = "${var.name_suffix}-TaskDefinition"
+  family                   = "${var.name_prefix}-TaskDefinition"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
@@ -224,7 +224,7 @@ resource "aws_alb" "MyALB" {
 }
 
 resource "aws_alb_target_group" "MyALBTargetGroup" {
-  name        = "${var.name_suffix}-target-group"
+  name        = "${var.name_prefix}-target-group"
   vpc_id      = var.vpc_id
   protocol    = "HTTP"
   port        = var.port
