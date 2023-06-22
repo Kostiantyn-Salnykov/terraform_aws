@@ -119,3 +119,13 @@ module "MyAPIGatewayWS" {
   name_prefix = local.name_prefix
   env         = var.env
 }
+
+module "MyRDSPostgreSQL" {
+  source            = "./_modules/rds_postgresql"
+  POSTGRES_DB       = var.POSTGRES_DB
+  POSTGRES_USERNAME = var.POSTGRES_USERNAME
+  POSTGRES_PASSWORD = var.POSTGRES_PASSWORD
+  vpc_id            = module.MyVPC.id
+  name_prefix       = local.name_prefix
+  tags              = local.tags
+}

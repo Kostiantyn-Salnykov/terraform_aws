@@ -2,8 +2,8 @@ IaaC roadmap to create:
 
 - [x] VPC (Internet gateway, subnets, route table, security groups);
 - [x] ~~Domain + Certificates~~ (ACM);
-- [x] ECR + Docker (repository, Docker build);
-- [x] ECS (cluster, service, task definition);
+- [x] ECR + Docker (repository, Docker build) - FastAPI image;
+- [x] ECS (cluster, service, task definition) - FastAPI service;
 - [x] SSM (parameters with path);
 - [x] SES (domain identity, email identity, register Route53 records);
 - [x] SNS (topic);
@@ -14,12 +14,13 @@ IaaC roadmap to create:
 - [x] API Gateway (API, mapping, cognito, lambda, domain);
 - [x] API Gateway (Websocket + lambda);
 - [x] Amplify (Vue.js example app);
-- [x] Cognito (user pool, domain, JWT);
+- [x] Cognito (user pool, domain, JWT authorizer);
 - [x] Cognito oAuth2 (GitHub, Google, etc...);
-- [ ] RDS (PostgreSQL, Aurora);
+- [x] RDS (PostgreSQL); 
+- [ ] RDS (Aurora);
 - [ ] ElastiCache (cluster, DB, connection via VPN endpoint);
 - [ ] API Gateway (file upload to S3);
-- [x] API Gateway (Websocket + Authorizer);
+- [x] API Gateway (Websocket `$connect`/`$disconnect`/`$default` + Request Authorizer);
 - [ ] IoT Core (certificates, rule, thing, thing group);
 - [ ] S3 with CloudFront (distribute mkdocs-material build, add Basic Auth);
 - [ ] VPC (NAT Gateway, VPN Endpoint, Elastic IP);

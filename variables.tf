@@ -42,3 +42,30 @@ variable "frontend_repository_url" {
   type        = string
   default     = "https://github.com/Kostiantyn-Salnykov/VueApp"
 }
+
+variable "POSTGRES_DB" {
+  description = "Database name for PostgreSQL."
+  type        = string
+}
+
+variable "POSTGRES_USERNAME" {
+  description = "Username for PostgreSQL."
+  type        = string
+}
+
+variable "POSTGRES_PASSWORD" {
+  description = "Password for PostgreSQL."
+  type        = string
+}
+
+variable "POSTGRES_ENGINE_VERSION" {
+  description = "Version for PostgreSQL engine."
+  type        = string
+  default     = "15.3"
+}
+
+variable "POSTGRES_PORT" {
+  description = "Port for PostgreSQL."
+  type        = string
+  default     = 5432
+}
