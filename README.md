@@ -22,7 +22,7 @@ IaaC roadmap to create:
 - [ ] API Gateway (file upload to S3);
 - [x] API Gateway (Websocket `$connect`/`$disconnect`/`$default` + Request Authorizer);
 - [ ] IoT Core (certificates, rule, thing, thing group);
-- [ ] S3 with CloudFront (distribute mkdocs-material build, add Basic Auth);
+- [x] S3 with CloudFront (distribute mkdocs-material build, add Basic Auth);
 - [ ] VPC (NAT Gateway, VPN Endpoint, Elastic IP);
 - [ ] DynamoDB;
 - [ ] CodeCommit (repository, approval templates, trigger);

@@ -29,6 +29,12 @@ provider "aws" {
 #  bucket_name = "${local.name_suffix}-ksalnykov.com"
 #}
 
+module "MySiteBucket" {
+  source = "./_modules/s3_cloudfront"
+  name_prefix = local.name_prefix
+  env    = var.env
+}
+
 #module "MyDefaultVPC" {
 #  source             = "./_modules/default_vpc"
 #  availability_zones = local.availability_zones
