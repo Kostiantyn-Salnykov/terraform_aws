@@ -47,5 +47,5 @@ terraform plan
 
 Run terraform apply with `-var-file` and auto approve.
 ```commandline
-terraform apply -var-file="dev.tfvars" -auto-approve
+terraform apply -var-file=".dev.tfvars" -auto-approve
 ```

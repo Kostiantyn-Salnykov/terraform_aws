@@ -3,6 +3,11 @@ variable "env" {
   type        = string
 }
 
+variable "cognito_data" {
+  description = "Proxy data from cognito module."
+  type        = map(any)
+}
+
 resource "aws_ssm_parameter" "MyEnvParameter" {
   name           = "/${var.env}/DEBUG"
   description    = "DEBUG parameter"

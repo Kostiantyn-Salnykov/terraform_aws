@@ -19,6 +19,16 @@ variable "ses_configuration_set_name" {
   default     = "default"
 }
 
+variable "GOOGLE_CLIENT_ID" {
+  description = "OpenID Connect Google client ID."
+  type        = string
+}
+
+variable "GOOGLE_CLIENT_SECRET" {
+  description = "OpenID Connect Google client secret."
+  type        = string
+}
+
 locals {
   cognito_domain = "auth.${var.domain}"
 }
@@ -43,7 +53,7 @@ resource "aws_cognito_user_pool" "MyUserPool" {
     }
   }
 
-  username_attributes = ["email", "phone_number"]
+  username_attributes = ["email"]
   mfa_configuration   = "OPTIONAL"
 
   software_token_mfa_configuration {
@@ -113,12 +123,28 @@ resource "aws_cognito_user_pool" "MyUserPool" {
     attribute_data_type = "String"
     name                = "phone_number"
     mutable             = true
-    required            = true
+    required            = false
 
     string_attribute_constraints {
       min_length = 0
       max_length = 15
     }
+  }
+}
+
+resource "aws_cognito_identity_provider" "MyGoogleIDP" {
+  user_pool_id  = aws_cognito_user_pool.MyUserPool.id
+  provider_name = "Google"
+  provider_type = "Google"
+  provider_details = {
+    client_id        = var.GOOGLE_CLIENT_ID
+    client_secret    = var.GOOGLE_CLIENT_SECRET
+    authorize_scopes = "email profile openid https://www.googleapis.com/auth/user.phonenumbers.read"
+  }
+
+  attribute_mapping = {
+    email    = "email"
+    username = "sub"
   }
 }
 
@@ -145,11 +171,14 @@ resource "aws_cognito_user_pool_client" "MyCognitoUserPoolClient" {
   ]
 
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_flows                  = ["code", "implicit"]
-  allowed_oauth_scopes                 = ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
-  prevent_user_existence_errors        = "ENABLED"
-  callback_urls                        = ["https://auth.ksalnykov.com/callback/"]
-  supported_identity_providers         = ["COGNITO"]
+  #  allowed_oauth_flows                  = ["code", "implicit"]
+  allowed_oauth_flows           = ["implicit"] # For testing
+  allowed_oauth_scopes          = ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
+  prevent_user_existence_errors = "ENABLED"
+  #  callback_urls                        = ["https://auth.ksalnykov.com/oauth2/idpresponse"]
+  callback_urls                = ["https://jwt.io"] # For testing
+  supported_identity_providers = ["COGNITO", aws_cognito_identity_provider.MyGoogleIDP.provider_name]
+  generate_secret              = true
 }
 
 resource "aws_cognito_user_pool_domain" "main" {

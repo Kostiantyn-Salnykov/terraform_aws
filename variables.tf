@@ -69,3 +69,13 @@ variable "POSTGRES_PORT" {
   type        = string
   default     = 5432
 }
+
+variable "GOOGLE_CLIENT_ID" {
+  description = "OpenID Connect Google client ID."
+  type        = string
+}
+
+variable "GOOGLE_CLIENT_SECRET" {
+  description = "OpenID Connect Google client secret."
+  type        = string
+}

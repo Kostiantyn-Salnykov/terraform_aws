@@ -28,13 +28,13 @@ variable "content_types" {
     "js"   = "application/javascript"
     "jpg"  = "image/jpeg"
     "png"  = "image/png"
-    "svg" = "image/svg+xml"
+    "svg"  = "image/svg+xml"
   }
 }
 
 locals {
-  bucket_path = "${path.module}/bucket/"
-  domain = "${var.env}-s3.${var.domain_name}"
+  bucket_path       = "${path.module}/bucket/"
+  domain            = "${var.env}-s3.${var.domain_name}"
   name_prefix_lower = lower(var.name_prefix)
 }
 
@@ -57,18 +57,18 @@ resource "aws_s3_bucket_website_configuration" "MyBucketWebSite" {
 }
 
 resource "aws_s3_object" "MySite" {
-  for_each = fileset(local.bucket_path, "**/**")  # Grab all files and files in subdirectories.
+  for_each = fileset(local.bucket_path, "**/**") # Grab all files and files in subdirectories.
 
-  bucket = aws_s3_bucket.MyBucket.id
-  key    = each.value
-  source = "${local.bucket_path}${each.value}"
-  etag = filemd5("${local.bucket_path}${each.value}")
+  bucket       = aws_s3_bucket.MyBucket.id
+  key          = each.value
+  source       = "${local.bucket_path}${each.value}"
+  etag         = filemd5("${local.bucket_path}${each.value}")
   content_type = lookup(var.content_types, split(".", each.value)[1], "application/octet-stream")
 }
 
 resource "aws_cloudfront_distribution" "MyS3Distribution" {
-  retain_on_delete = true  # Don't delete distribution, just deactivate it (needs to delete it manually)
-  wait_for_deployment = false  # Skip waiting for deployment
+  retain_on_delete    = true  # Don't delete distribution, just deactivate it (needs to delete it manually)
+  wait_for_deployment = false # Skip waiting for deployment
 
   origin {
     domain_name = aws_s3_bucket.MyBucket.bucket_regional_domain_name
@@ -78,22 +78,22 @@ resource "aws_cloudfront_distribution" "MyS3Distribution" {
     }
   }
 
-  aliases = [local.domain]
-  comment = "MyS3 Distribution"
+  aliases             = [local.domain]
+  comment             = "MyS3 Distribution"
   default_root_object = "index.html"
-  enabled = true
-  is_ipv6_enabled = true
+  enabled             = true
+  is_ipv6_enabled     = true
 
   default_cache_behavior {
     target_origin_id       = aws_s3_bucket.MyBucket.id
     viewer_protocol_policy = "redirect-to-https"
-    default_ttl = 3600
-    min_ttl = 60
-    max_ttl = 3600 * 12
-    allowed_methods = ["GET", "HEAD", "OPTIONS"]
-    cached_methods = ["GET", "HEAD"]
+    default_ttl            = 3600
+    min_ttl                = 60
+    max_ttl                = 3600 * 12
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
     forwarded_values {
-      headers = ["Content-Type"]
+      headers      = ["Content-Type"]
       query_string = false
       cookies {
         forward = "none"
@@ -102,8 +102,8 @@ resource "aws_cloudfront_distribution" "MyS3Distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = data.aws_acm_certificate.MyCertificate.arn
-    ssl_support_method = "sni-only"
+    acm_certificate_arn      = data.aws_acm_certificate.MyCertificate.arn
+    ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
@@ -116,7 +116,7 @@ resource "aws_cloudfront_distribution" "MyS3Distribution" {
 
 resource "aws_route53_record" "my_domain" {
   zone_id = data.aws_route53_zone.MyRoute53Zone.zone_id
-  name = local.domain
+  name    = local.domain
   type    = "A"
   alias {
     name                   = aws_cloudfront_distribution.MyS3Distribution.domain_name

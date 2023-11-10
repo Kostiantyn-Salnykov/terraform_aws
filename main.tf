@@ -30,9 +30,9 @@ provider "aws" {
 #}
 
 module "MySiteBucket" {
-  source = "./_modules/s3_cloudfront"
+  source      = "./_modules/s3_cloudfront"
   name_prefix = local.name_prefix
-  env    = var.env
+  env         = var.env
 }
 
 #module "MyDefaultVPC" {
@@ -69,8 +69,10 @@ module "MySES" {
 }
 
 module "MyCognito" {
-  source = "./_modules/cognito"
-  domain = var.domain_name
+  source               = "./_modules/cognito"
+  domain               = var.domain_name
+  GOOGLE_CLIENT_ID     = var.GOOGLE_CLIENT_ID
+  GOOGLE_CLIENT_SECRET = var.GOOGLE_CLIENT_SECRET
 }
 
 module "MyLayers" {
@@ -84,8 +86,9 @@ module "MyLambdas" {
 }
 
 module "MySSM" {
-  source = "./_modules/ssm"
-  env    = var.env
+  source       = "./_modules/ssm"
+  env          = var.env
+  cognito_data = module.MyCognito.MyData
 }
 
 module "MyAPIGateway" {
