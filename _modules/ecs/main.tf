@@ -183,7 +183,7 @@ resource "aws_ecs_task_definition" "MyECSTaskDefinition" {
 resource "aws_ecs_service" "MyECSService" {
   name                              = local.service_name
   cluster                           = aws_ecs_cluster.MyECSCluster.id
-  task_definition                   = "${aws_ecs_task_definition.MyECSTaskDefinition.family}:latest"
+  task_definition                   = "${aws_ecs_task_definition.MyECSTaskDefinition.family}"
   desired_count                     = var.tasks_count
   launch_type                       = "FARGATE"
   health_check_grace_period_seconds = 30
@@ -215,6 +215,8 @@ resource "aws_alb" "MyALB" {
   subnets                    = data.aws_subnets.MySubnets.ids
   security_groups            = data.aws_security_groups.MySecurityGroups.ids
   enable_deletion_protection = false
+  internal                   = false
+  ip_address_type            = "dualstack"
   # TODO: Fix error when security groups not created yet.
 
   depends_on = [

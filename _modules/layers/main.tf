@@ -95,4 +95,8 @@ output "arn" {
 output "version" {
   value = aws_lambda_layer_version.MyLambdaLayer.version
 }
+
+output "layer_name" {
+  value = aws_lambda_layer_version.MyLambdaLayer.layer_name
+}
 # =====

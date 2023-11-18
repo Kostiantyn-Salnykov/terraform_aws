@@ -13,6 +13,12 @@ variable "availability_zones" {
     error_message = "List of availability zones should be more than 2."
   }
 }
+
+variable "aws_region" {
+  description = "AWS region."
+  type        = string
+  default     = "eu-central-1"
+}
 # =====
 
 # ==Locals==
@@ -30,11 +36,28 @@ locals {
 # ==Resources==
 resource "aws_vpc" "MyVPC" {
   cidr_block           = "10.0.0.0/16"
+  assign_generated_ipv6_cidr_block = true
   enable_dns_hostnames = true
   enable_dns_support   = true
   tags                 = merge(var.tags, tomap({ "Name" : "Custom VPC" }))
 
 }
+
+
+resource "aws_vpc_ipam" "MyVPCIPAM" {
+  operating_regions {
+    region_name = var.aws_region
+  }
+}
+
+resource "aws_vpc_ipam_pool" "MyVPCIPAMPool" {
+  address_family = "ipv6"
+  ipam_scope_id  = aws_vpc_ipam.MyVPCIPAM.public_default_scope_id
+  locale = var.aws_region
+
+}
+
+
 
 resource "aws_internet_gateway" "MyIG" {
   vpc_id = aws_vpc.MyVPC.id
@@ -61,10 +84,10 @@ resource "aws_route_table_association" "MyRouteTableAssociation" {
 
 resource "aws_subnet" "MyPublicSubnet" {
   vpc_id                  = aws_vpc.MyVPC.id
-  cidr_block              = "10.0.${count.index}.0/24"
+  cidr_block = cidrsubnet(aws_vpc.MyVPC.cidr_block, 4, count.index + 1)
+  ipv6_cidr_block = cidrsubnet(aws_vpc.MyVPC.ipv6_cidr_block, 8, count.index + 1)
   availability_zone       = var.availability_zones[count.index]
   tags                    = merge(var.tags, tomap({ "Name" : "Custom - ${count.index}" }))
-  map_public_ip_on_launch = true
 
   count      = length(var.availability_zones)
   depends_on = [aws_vpc.MyVPC]

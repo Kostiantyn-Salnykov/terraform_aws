@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "4.67.0"
+      version = "5.26.0"
     }
   }
 }
@@ -75,6 +75,12 @@ module "MyCognito" {
   GOOGLE_CLIENT_SECRET = var.GOOGLE_CLIENT_SECRET
 }
 
+module "MySSM" {
+  source       = "./_modules/ssm"
+  env          = var.env
+  cognito_data = module.MyCognito.MyData
+}
+
 module "MyLayers" {
   source = "./_modules/layers"
 }
@@ -83,12 +89,6 @@ module "MyLambdas" {
   source       = "./_modules/lambda"
   env          = var.env
   environments = ["DEBUG", ]
-}
-
-module "MySSM" {
-  source       = "./_modules/ssm"
-  env          = var.env
-  cognito_data = module.MyCognito.MyData
 }
 
 module "MyAPIGateway" {

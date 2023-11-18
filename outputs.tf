@@ -3,7 +3,7 @@ output "MyVPCid" {
   value       = module.MyVPC.id
 }
 
-output "MyCertificateARN" {
-  description = "MyCertificate ARN."
-  value       = module.MyAWSECS.MyCertificate
-}
+#output "MyCertificateARN" {
+#  description = "MyCertificate ARN."
+#  value       = module.MyAWSECS.MyCertificate
+#}

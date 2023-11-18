@@ -22,7 +22,7 @@ variable "POSTGRES_PORT" {
 variable "POSTGRES_ENGINE_VERSION" {
   description = "Version for PostgreSQL engine."
   type        = string
-  default     = "15.3"
+  default     = "16.1"
 }
 
 variable "vpc_id" {
@@ -90,6 +90,7 @@ resource "aws_security_group" "MyPostgreSQLSG" {
 
 resource "aws_db_subnet_group" "MyRDSSubnetGroup" {
   name       = "my_rds_subnet_group"
+  description = "Subnet groups for PostgreSQL"
   subnet_ids = tolist(data.aws_subnets.MyVPCSubnets.ids)
 
   tags = merge(var.tags, tomap({ "Name" : "my_rds_subnet_group" }))

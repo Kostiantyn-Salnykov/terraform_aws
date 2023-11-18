@@ -45,7 +45,27 @@ Terraform plan
 terraform plan
 ```
 
-Run terraform apply with `-var-file` and auto approve.
+
+
+1. Create Layer
+```commandline
+terraform apply -var-file=".dev.tfvars" -auto-approve -target="module.MyLayers"
+```
+
+2. Create SSM parameters
+```commandline
+terraform apply -var-file=".dev.tfvars" -auto-approve -target="module.MySSM"
+```
+
+3. Create SESv2
+```commandline
+terraform apply -var-file=".dev.tfvars" -auto-approve -target="module.MySES"
+```
+
+For SES it requires extra step (download .csv with extra TXT records to 
+verify domain).
+
+4. Run terraform apply with `-var-file` and auto approve.
 ```commandline
 terraform apply -var-file=".dev.tfvars" -auto-approve
 ```
